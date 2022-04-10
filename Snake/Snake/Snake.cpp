@@ -75,7 +75,7 @@ void Snake::snakeWelcometo()
 		controlKey();
 		break;
 	case 2:
-		ConsoleTextFailed("功能未实现");
+		gameExplation();
 		break;
 	case 3:
 		exit(0);
@@ -202,6 +202,7 @@ void Snake::createFood()
 	}
 	food = food_t;
 
+	color(6);
 	gotoxy(food_t->x, food_t->y);
 	std::cout << "●";
 
@@ -233,6 +234,7 @@ void Snake::controlKey()
 		}
 		Sleep(100);
 		moveSanke();
+		cantWall();
 	}
 	return;
 }
@@ -251,13 +253,16 @@ void Snake::moveSanke()
 		p = head;
 		if (nexthead->x == food->x && nexthead->y == food->y)
 		{
-			while (p != nullptr)
+			while (p->next != nullptr)
 			{
 				color(6);
 				gotoxy(p->x, p->y);
 				std::cout << "■";
 				p = p->next;
 			}
+			gotoxy(p->x, p->y);
+			color(7);
+			std::cout << "■";
 			createFood();
 		}
 		else
@@ -288,13 +293,17 @@ void Snake::moveSanke()
 		p = head;
 		if (nexthead->x == food->x && nexthead->y == food->y)
 		{
-			while (p != nullptr)
+			while (p->next != nullptr)
 			{
 				color(6);
 				gotoxy(p->x, p->y);
 				std::cout << "■";
 				p = p->next;
 			}
+			gotoxy(p->x, p->y);
+			color(7);
+			std::cout << "■";
+			createFood();
 			createFood();
 		}
 		else
@@ -327,13 +336,16 @@ void Snake::moveSanke()
 
 		if (nexthead->x == food->x && nexthead->y == food->y)
 		{
-			while (p != nullptr)
+			while (p->next != nullptr)
 			{
 				color(6);
 				gotoxy(p->x, p->y);
 				std::cout << "■";
 				p = p->next;
 			}
+			gotoxy(p->x, p->y);
+			color(7);
+			std::cout << "■";
 			createFood();
 		}
 		else
@@ -365,13 +377,16 @@ void Snake::moveSanke()
 
 		if (nexthead->x == food->x && nexthead->y == food->y)
 		{
-			while (p != nullptr)
+			while (p->next != nullptr)
 			{
 				color(6);
 				gotoxy(p->x, p->y);
 				std::cout << "■";
 				p = p->next;
 			}
+			gotoxy(p->x, p->y);
+			color(7);
+			std::cout << "■";
 			createFood();
 		}
 		else
@@ -396,11 +411,89 @@ void Snake::moveSanke()
 
 void Snake::cantWall()
 {
+	if (head->x == 56 || head->y == 26 || head->x == 0 || head->y == 0)
+	{
+		gameOver();
+	}
+}
 
+void Snake::gameOver()
+{
+	system("cls");
+	gotoxy(36, 15);
+	std::cout << "游戏结束";
+	return;
 }
 
 void Snake::color(int col)
 {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(handle, col);
+}
+
+void Snake::gameExplation()
+{
+	int i, j = 1;
+	system("cls");
+	gotoxy(40, 4);
+	printf("游   戏   说   明");
+	color(2);
+	for (i = 6; i <= 25; i++)
+	{
+		for (j = 20; j <= 76; j++)
+		{
+			gotoxy(j, i);
+			if (i == 6 || i == 25)
+			{
+				if (i % 2 == 0)
+					color(3);
+				else
+					color(13);
+				printf("=");
+			}
+			else if (j == 20 || j == 76)
+			{
+				if (i % 2 == 0)
+					color(3);
+				else
+					color(13);
+				printf("||");
+			}
+		}
+	}
+
+	color(13);
+	gotoxy(76, 6);
+	printf("★");
+	gotoxy(76, 25);
+	printf("★");
+
+	color(3);
+	gotoxy(26, 8);
+	printf("1、不能撞墙，不能咬到自己");
+
+	color(10);
+	gotoxy(26, 11);
+	printf("2、W，S，A，D分别控制蛇的移动");
+
+	color(13);
+	gotoxy(26, 14);
+	printf("3、未实现");
+
+	color(14);
+	gotoxy(26, 17);
+	printf("4、鼠标左击任意地方键暂停游戏，再按回车继续游戏");
+
+	color(4);
+	gotoxy(26, 20);
+	printf("5、未实现");
+
+	color(1);
+	gotoxy(26, 23);
+	printf("6、任意键返回主界面");
+
+	_getch();                        //按任任意键返回主界面
+
+	system("cls");
+	snakeWelcometo();
 }
